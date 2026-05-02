@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: atencion_total_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: atencion_total_backend
+    ports:
+      - "3000:3000"
+    environment:
+      # Aquí le decimos a Docker que use esta ruta en lugar de localhost
+      - MONGO_URI=mongodb://mongo:27017/atencionTotalDB
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
